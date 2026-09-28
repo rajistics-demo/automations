@@ -1,0 +1,17 @@
+agent_profile_id: null
+enabled: true
+entrypoint: python3 main.py
+keep_alive: false
+model: Bedrock
+name: "Automation Sharing Demo \u2014 Python Heartbeat"
+preset_metadata: null
+prompt: null
+setup_script_path: null
+tarball_source:
+  type: internal
+  url: null
+timeout: 120
+trigger:
+  schedule: 0 9 * * 1
+  timezone: America/Chicago
+  type: cron
