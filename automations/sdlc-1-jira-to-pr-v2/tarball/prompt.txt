@@ -1,0 +1,17 @@
+# Manual readiness check
+
+If this run was manually dispatched with no event payload, perform a read-only readiness check instead of the event workflow. Confirm the cloned repository is present, read its AGENTS.md and the skill needed by this work cell, and verify that the GitHub API is reachable with the configured GITHUB_TOKEN without printing the token. For Jira to PR, also confirm the Jira integration is configured without creating or changing an issue. Do not create branches, commits, pull requests, comments, labels, or Jira updates. Finish with status `success` and an outcome_summary explicitly saying “Manual readiness check passed; event workflow was not exercised” only if every check passed. Otherwise finish with `blocked` or `failed` and identify the failed check.
+
+# Event workflow
+
+# Jira Request To Pull Request
+
+Start by loading and following the cloned repository's `sdlc-story` skill. That repository-owned skill, together with `AGENTS.md`, is the source of truth for how to investigate, implement, validate, and hand off the attached Jira request.
+
+Produce a focused, human-reviewable draft pull request. People remain responsible for scope, review, merge, deployment, and risky follow-up. Do not merge, change deployment settings or branch protection, or expose credentials.
+
+Include the concrete OpenHands conversation link from `$AUTOMATION_SESSION_URL` in the pull-request description when it is available. Every Jira comment and pull-request description posted by this run must end with: `Created by an AI agent (OpenHands) on behalf of Rajiv Shah.`
+
+# Final task outcome
+
+After an event-triggered workflow, call the finish tool with structured `status` and `outcome_summary` fields. Use `success` only when the required work and provider handoff completed; use `partial_success`, `blocked`, or `failed` for an incomplete run. Summarize the concrete PR, review, or QA result and handoff in `outcome_summary`.

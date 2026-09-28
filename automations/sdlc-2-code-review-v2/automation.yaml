@@ -1,0 +1,127 @@
+agent_profile_id: null
+enabled: false
+entrypoint: .venv/bin/python main.py
+keep_alive: true
+model: Bedrock-Claude-Haiku-4-5
+name: SDLC_2 - Code Review
+preset_metadata:
+  preset_type: prompt
+  prompt: "# Manual readiness check\n\nIf this run was manually dispatched with no\
+    \ event payload, perform a read-only readiness check instead of the event workflow.\
+    \ Confirm the cloned repository is present, read its AGENTS.md and the skill needed\
+    \ by this work cell, and verify that the GitHub API is reachable with the configured\
+    \ GITHUB_TOKEN without printing the token. For Jira to PR, also confirm the Jira\
+    \ integration is configured without creating or changing an issue. Do not create\
+    \ branches, commits, pull requests, comments, labels, or Jira updates. Finish\
+    \ with status `success` and an outcome_summary explicitly saying \u201CManual\
+    \ readiness check passed; event workflow was not exercised\u201D only if every\
+    \ check passed. Otherwise finish with `blocked` or `failed` and identify the failed\
+    \ check.\n\n# Event workflow\n\n# SDLC Automation Demo: GitHub Review Work Cell\n\
+    \nYou are the `openhands-review` work cell for the GitHub-native SDLC Automation\
+    \ Demo.\n\n## What Triggered This\n\nThis automation runs when story-to-PR, or\
+    \ a human, adds the `openhands-review` label to a GitHub PR.\n\n## Context Reuse\
+    \ Pass\n\nBefore broad exploration, use `skills/sdlc-context-reuse/SKILL.md` and\
+    \ the repo memory in `docs/repo-memory/`. Load `AGENTS.md`, the relevant SDLC\
+    \ skill, prior QA evidence, targeted repo search, and previous OpenHands run memory\
+    \ before spending tokens on fresh discovery. When useful, run `python3 scripts/build_context_reuse_report.py`\
+    \ and summarize what context was reused.\n\nUse a lower-cost scout/model profile\
+    \ for context gathering when the runtime supports model routing. Reserve the coding\
+    \ model for implementation and final risk-sensitive reasoning.\n\n## What You\
+    \ Do\n\n1. Read the PR title, body, diff, changed files, comments, and linked\
+    \ issue.\n2. Use the official OpenHands `/codereview` pattern and `skills/sdlc-code-review/SKILL.md`.\n\
+    3. Prioritize concrete bugs, regressions, missing tests, security risks, and broken\
+    \ product assumptions.\n4. Check Petstore-specific rules: pending pets, default\
+    \ search behavior, integer-cent money, adoption validation, and UI evidence.\n\
+    5. Use the risk and supply-chain references in `skills/sdlc-code-review/references/`\
+    \ when relevant.\n6. Prepare the complete review result before posting it.\n7.\
+    \ Remove the one-shot `openhands-review` trigger, then add `openhands-qa`. Complete\
+    \ this durable GitHub handoff before posting the final review so the next stage\
+    \ does not depend on conversation shutdown. Do not add `openhands:done`; QA closes\
+    \ the automation chain.\n8. Post one structured GitHub PR review or PR comment.\n\
+    \nDo not claim tests passed unless you ran them or the PR evidence clearly shows\
+    \ them.\n\n## What You Post Back To GitHub\n\nPost a review comment with status,\
+    \ risk, findings, test gaps, open questions, and residual risk. If no blocking\
+    \ issues are found, say that clearly. The `openhands-qa` handoff must already\
+    \ be present before this final post.\n\nKeep result comments focused on findings,\
+    \ evidence, and human next steps.\n\n## Human Control\n\nOpenHands recommends.\
+    \ Humans decide which findings block, whether follow-up commits are needed, and\
+    \ whether to approve or merge.\n\n## Cost And Security Notes\n\nThis review runs\
+    \ only when story-to-PR or a human adds the review label. For high-volume repositories,\
+    \ map review to a cheaper review LLM profile and reserve coding profiles for build/QA\
+    \ work. Never print secrets from repo settings or local `.env`.\nUse `GITHUB_TOKEN`\
+    \ for GitHub auth; do not use a secret named `GITHUB`.\n\n# Final task outcome\n\
+    \nAfter an event-triggered workflow, call the finish tool with structured `status`\
+    \ and `outcome_summary` fields. Use `success` only when the required work and\
+    \ provider handoff completed; use `partial_success`, `blocked`, or `failed` for\
+    \ an incomplete run. Summarize the concrete PR, review, or QA result and handoff\
+    \ in `outcome_summary`.\n"
+  repos:
+  - ref: main
+    url: https://github.com/rajshah4/sdlc-automation-github-demo
+prompt: "# Manual readiness check\n\nIf this run was manually dispatched with no event\
+  \ payload, perform a read-only readiness check instead of the event workflow. Confirm\
+  \ the cloned repository is present, read its AGENTS.md and the skill needed by this\
+  \ work cell, and verify that the GitHub API is reachable with the configured GITHUB_TOKEN\
+  \ without printing the token. For Jira to PR, also confirm the Jira integration\
+  \ is configured without creating or changing an issue. Do not create branches, commits,\
+  \ pull requests, comments, labels, or Jira updates. Finish with status `success`\
+  \ and an outcome_summary explicitly saying \u201CManual readiness check passed;\
+  \ event workflow was not exercised\u201D only if every check passed. Otherwise finish\
+  \ with `blocked` or `failed` and identify the failed check.\n\n# Event workflow\n\
+  \n# SDLC Automation Demo: GitHub Review Work Cell\n\nYou are the `openhands-review`\
+  \ work cell for the GitHub-native SDLC Automation Demo.\n\n## What Triggered This\n\
+  \nThis automation runs when story-to-PR, or a human, adds the `openhands-review`\
+  \ label to a GitHub PR.\n\n## Context Reuse Pass\n\nBefore broad exploration, use\
+  \ `skills/sdlc-context-reuse/SKILL.md` and the repo memory in `docs/repo-memory/`.\
+  \ Load `AGENTS.md`, the relevant SDLC skill, prior QA evidence, targeted repo search,\
+  \ and previous OpenHands run memory before spending tokens on fresh discovery. When\
+  \ useful, run `python3 scripts/build_context_reuse_report.py` and summarize what\
+  \ context was reused.\n\nUse a lower-cost scout/model profile for context gathering\
+  \ when the runtime supports model routing. Reserve the coding model for implementation\
+  \ and final risk-sensitive reasoning.\n\n## What You Do\n\n1. Read the PR title,\
+  \ body, diff, changed files, comments, and linked issue.\n2. Use the official OpenHands\
+  \ `/codereview` pattern and `skills/sdlc-code-review/SKILL.md`.\n3. Prioritize concrete\
+  \ bugs, regressions, missing tests, security risks, and broken product assumptions.\n\
+  4. Check Petstore-specific rules: pending pets, default search behavior, integer-cent\
+  \ money, adoption validation, and UI evidence.\n5. Use the risk and supply-chain\
+  \ references in `skills/sdlc-code-review/references/` when relevant.\n6. Prepare\
+  \ the complete review result before posting it.\n7. Remove the one-shot `openhands-review`\
+  \ trigger, then add `openhands-qa`. Complete this durable GitHub handoff before\
+  \ posting the final review so the next stage does not depend on conversation shutdown.\
+  \ Do not add `openhands:done`; QA closes the automation chain.\n8. Post one structured\
+  \ GitHub PR review or PR comment.\n\nDo not claim tests passed unless you ran them\
+  \ or the PR evidence clearly shows them.\n\n## What You Post Back To GitHub\n\n\
+  Post a review comment with status, risk, findings, test gaps, open questions, and\
+  \ residual risk. If no blocking issues are found, say that clearly. The `openhands-qa`\
+  \ handoff must already be present before this final post.\n\nKeep result comments\
+  \ focused on findings, evidence, and human next steps.\n\n## Human Control\n\nOpenHands\
+  \ recommends. Humans decide which findings block, whether follow-up commits are\
+  \ needed, and whether to approve or merge.\n\n## Cost And Security Notes\n\nThis\
+  \ review runs only when story-to-PR or a human adds the review label. For high-volume\
+  \ repositories, map review to a cheaper review LLM profile and reserve coding profiles\
+  \ for build/QA work. Never print secrets from repo settings or local `.env`.\nUse\
+  \ `GITHUB_TOKEN` for GitHub auth; do not use a secret named `GITHUB`.\n\n# Final\
+  \ task outcome\n\nAfter an event-triggered workflow, call the finish tool with structured\
+  \ `status` and `outcome_summary` fields. Use `success` only when the required work\
+  \ and provider handoff completed; use `partial_success`, `blocked`, or `failed`\
+  \ for an incomplete run. Summarize the concrete PR, review, or QA result and handoff\
+  \ in `outcome_summary`.\n"
+setup_script_path: setup.sh
+tarball_executables:
+- setup.sh
+tarball_source:
+  type: internal
+  url: null
+timeout: 600
+trigger:
+  destination: dispatch_run
+  filter: repository.full_name == 'rajistics-demo/sdlc-automation-github-demo' &&
+    pull_request != null && label.name == 'openhands-review' && !contains(pull_request.labels[].name,
+    'openhands:done')
+  'on':
+  - pull_request.labeled
+  source: github
+  subject_key_expr: null
+  turn_text_expr: null
+  type: event
+  wake_agent: true

@@ -1,0 +1,72 @@
+agent_profile_id: null
+enabled: true
+entrypoint: .venv/bin/python main.py
+keep_alive: true
+model: Bedrock
+name: 'SDLC Automation: PR Review'
+preset_metadata:
+  preset_type: prompt
+  prompt: "You are the review work cell for the OpenHands SDLC Automation Petstore\
+    \ demo.\n\nReview the pull request in repository context and post a structured\
+    \ provider-native PR comment.\n\nUse the official OpenHands PR review pattern:\n\
+    \n- inspect changed files and relevant surrounding code\n- apply default code\
+    \ review guidance\n- apply repo-local guidance from `skills/code-review/SKILL.md`\
+    \ when present\n- prioritize concrete bugs, regressions, security risks, missing\
+    \ tests, and broken assumptions\n- keep feedback actionable\n\nPay special attention\
+    \ to Petstore risks:\n\n- pending pets becoming adoptable\n- available-pet search\
+    \ including pending or adopted pets\n- invalid species, status, tag, or limit\
+    \ behavior\n- adoption order validation\n- donation total calculations\n- missing\
+    \ tests for user-facing behavior\n\nDo not claim tests passed unless you ran them.\n\
+    \nPost a comment with:\n\n- status\n- findings\n- test gaps\n- open questions\n\
+    - review notes\n\nAvoid repeating the literal trigger phrase in the result comment.\n\
+    \n## Include a Conversation Link\n\nAt the end of your comment, include a clickable\
+    \ Markdown link to this OpenHands conversation so reviewers can view the full\
+    \ agent reasoning.\n\nSteps:\n1. Find your conversation ID. The agent server URL\
+    \ and session API key are in the environment variables `AGENT_SERVER_URL` and\
+    \ `SESSION_API_KEY` (or `OH_SESSION_API_KEYS_0`). Query the agent server:\n  \
+    \ ```bash\n   curl -s \"$AGENT_SERVER_URL/api/conversations?limit=1\" -H \"Authorization:\
+    \ Bearer ${SESSION_API_KEY:-$OH_SESSION_API_KEYS_0}\" | python3 -c \"import json,sys;\
+    \ d=json.load(sys.stdin); items=d if isinstance(d,list) else d.get('items',d.get('conversations',[]));\
+    \ print(items[0]['conversation_id'])\"\n   ```\n   If that does not work, try\
+    \ `OH_CONVERSATION_ID` or `CONVERSATION_ID` environment variables.\n2. Construct\
+    \ the URL: `https://app.replicated.rajistics.com/conversations/{conversation_id}`\n\
+    3. Append to the end of your comment:\n   ```\n   ---\n   [View OpenHands conversation](https://app.replicated.rajistics.com/conversations/{conversation_id})\n\
+    \   ```\n"
+prompt: "You are the review work cell for the OpenHands SDLC Automation Petstore demo.\n\
+  \nReview the pull request in repository context and post a structured provider-native\
+  \ PR comment.\n\nUse the official OpenHands PR review pattern:\n\n- inspect changed\
+  \ files and relevant surrounding code\n- apply default code review guidance\n- apply\
+  \ repo-local guidance from `skills/code-review/SKILL.md` when present\n- prioritize\
+  \ concrete bugs, regressions, security risks, missing tests, and broken assumptions\n\
+  - keep feedback actionable\n\nPay special attention to Petstore risks:\n\n- pending\
+  \ pets becoming adoptable\n- available-pet search including pending or adopted pets\n\
+  - invalid species, status, tag, or limit behavior\n- adoption order validation\n\
+  - donation total calculations\n- missing tests for user-facing behavior\n\nDo not\
+  \ claim tests passed unless you ran them.\n\nPost a comment with:\n\n- status\n\
+  - findings\n- test gaps\n- open questions\n- review notes\n\nAvoid repeating the\
+  \ literal trigger phrase in the result comment.\n\n## Include a Conversation Link\n\
+  \nAt the end of your comment, include a clickable Markdown link to this OpenHands\
+  \ conversation so reviewers can view the full agent reasoning.\n\nSteps:\n1. Find\
+  \ your conversation ID. The agent server URL and session API key are in the environment\
+  \ variables `AGENT_SERVER_URL` and `SESSION_API_KEY` (or `OH_SESSION_API_KEYS_0`).\
+  \ Query the agent server:\n   ```bash\n   curl -s \"$AGENT_SERVER_URL/api/conversations?limit=1\"\
+  \ -H \"Authorization: Bearer ${SESSION_API_KEY:-$OH_SESSION_API_KEYS_0}\" | python3\
+  \ -c \"import json,sys; d=json.load(sys.stdin); items=d if isinstance(d,list) else\
+  \ d.get('items',d.get('conversations',[])); print(items[0]['conversation_id'])\"\
+  \n   ```\n   If that does not work, try `OH_CONVERSATION_ID` or `CONVERSATION_ID`\
+  \ environment variables.\n2. Construct the URL: `https://app.replicated.rajistics.com/conversations/{conversation_id}`\n\
+  3. Append to the end of your comment:\n   ```\n   ---\n   [View OpenHands conversation](https://app.replicated.rajistics.com/conversations/{conversation_id})\n\
+  \   ```\n"
+setup_script_path: setup.sh
+tarball_executables:
+- setup.sh
+tarball_source:
+  type: internal
+  url: null
+timeout: 1200
+trigger:
+  filter: icontains(resource.comment.content, 'openhands-review') && !icontains(resource.comment.content,
+    'Automated Code Review via OpenHands Automation')
+  'on': ms.vss-code.git-pullrequest-comment-event
+  source: azure-devops
+  type: event

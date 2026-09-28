@@ -1,0 +1,109 @@
+agent_profile_id: null
+enabled: true
+entrypoint: .venv/bin/python main.py
+keep_alive: true
+model: Bedrock-Claude-Haiku-4-5
+name: Weekly Autodocs (multi-agent-demo)
+preset_metadata:
+  plugins:
+  - ref: main
+    source: https://github.com/rajshah4/openhands-autodocs
+  preset_type: plugin
+  prompt: "Run the autodocs update workflow for the cloned repository rajshah4/openhands-multi-agent-demo\
+    \ (it was cloned into the workspace on its default branch).\n\nUse the autodocs\
+    \ plugin. Invoke the update command: `/autodocs:update`.\n\nThe repository already\
+    \ has `openwiki/` documentation and a top-level `AGENTS.md`, so this is an UPDATE\
+    \ run, not an init. Follow the autodocs update-mode rules strictly:\n- Read existing\
+    \ `openwiki/` docs and `openwiki/.last-update.json` first.\n- Inspect git history\
+    \ since the last docs update to find what changed.\n- Edit ONLY documentation\
+    \ pages that are stale, incomplete, or misleading because of recent source changes.\
+    \ Prefer replacing one stale sentence over rewriting an accurate page. Do not\
+    \ make formatting-only edits. If the docs are already current, change nothing\
+    \ and say so.\n- Keep all generated docs under `openwiki/`. The only allowed edits\
+    \ outside `openwiki/` are the top-level `AGENTS.md` / `CLAUDE.md` Autodocs reference\
+    \ section.\n- Update `openwiki/.last-update.json` metadata only if docs content\
+    \ changed.\n\nWhen the docs edits are done, commit and open a pull request:\n\
+    - Create a branch named `autodocs/update`.\n- Commit ONLY `openwiki/**` and top-level\
+    \ `AGENTS.md` / `CLAUDE.md`. Suggested message: `docs: update Autodocs`.\n- Push\
+    \ the branch and open a PR titled `docs: update Autodocs`. If that branch already\
+    \ has an open PR, update the existing PR instead of creating a duplicate. PR body\
+    \ should follow the autodocs suggested template: changed docs, evidence inspected,\
+    \ context sources used, review notes.\n- If there were no docs changes, do NOT\
+    \ open a PR; report that docs are current.\n\nAuthentication for git push + PR:\
+    \ the repo was cloned read-only, so before pushing re-point the origin URL at\
+    \ an authenticated https remote using the injected `$GITHUB_TOKEN` (reference\
+    \ it by name inside the remote URL; never echo it):\n```bash\ngit remote set-url\
+    \ origin \"https://x-access-token:${GITHUB_TOKEN}@github.com/rajshah4/openhands-multi-agent-demo.git\"\
+    \n```\nUse `gh` for the PR (it picks up `$GITHUB_TOKEN` automatically), or the\
+    \ GitHub API with `Authorization: Bearer $GITHUB_TOKEN`.\n\n## Report to #it\n\
+    \nPost a short plain-text summary to the #it Slack channel via the `$SLACK_IT`\
+    \ incoming webhook (reference it only as the curl URL; never echo it):\n```bash\n\
+    curl -sS -m 15 -H 'Content-Type: application/json' \\\n  -d \"{\\\"text\\\": <your\
+    \ message as JSON string>}\" \"$SLACK_IT\"\n```\nThe message must contain, in\
+    \ plain text:\n- the date and which repo you documented,\n- whether docs were\
+    \ updated or already current,\n- if a PR was opened: the PR URL,\n- a one-line\
+    \ note on the main docs change (or \"no changes needed\"),\n- a link to the repo's\
+    \ `openwiki/quickstart.md` on the default branch.\nKeep it under ~8 lines. Do\
+    \ not include secrets, token values, or partial secret prefixes.\n\nFinish. Do\
+    \ not start another loop.\n\n## Final outcome\n\nAfter the workflow and Slack\
+    \ report, call the finish tool with a structured task outcome. Set `status` to\
+    \ `success` when all required steps finished, including when the docs were already\
+    \ current. Use `partial_success`, `blocked`, or `failed` when those accurately\
+    \ describe an incomplete run. Include a concise `outcome_summary` that states\
+    \ whether docs changed, whether a PR was created or updated, and whether the Slack\
+    \ report was posted.\n"
+  repos:
+  - ref: main
+    url: https://github.com/rajshah4/openhands-multi-agent-demo
+prompt: "Run the autodocs update workflow for the cloned repository rajshah4/openhands-multi-agent-demo\
+  \ (it was cloned into the workspace on its default branch).\n\nUse the autodocs\
+  \ plugin. Invoke the update command: `/autodocs:update`.\n\nThe repository already\
+  \ has `openwiki/` documentation and a top-level `AGENTS.md`, so this is an UPDATE\
+  \ run, not an init. Follow the autodocs update-mode rules strictly:\n- Read existing\
+  \ `openwiki/` docs and `openwiki/.last-update.json` first.\n- Inspect git history\
+  \ since the last docs update to find what changed.\n- Edit ONLY documentation pages\
+  \ that are stale, incomplete, or misleading because of recent source changes. Prefer\
+  \ replacing one stale sentence over rewriting an accurate page. Do not make formatting-only\
+  \ edits. If the docs are already current, change nothing and say so.\n- Keep all\
+  \ generated docs under `openwiki/`. The only allowed edits outside `openwiki/` are\
+  \ the top-level `AGENTS.md` / `CLAUDE.md` Autodocs reference section.\n- Update\
+  \ `openwiki/.last-update.json` metadata only if docs content changed.\n\nWhen the\
+  \ docs edits are done, commit and open a pull request:\n- Create a branch named\
+  \ `autodocs/update`.\n- Commit ONLY `openwiki/**` and top-level `AGENTS.md` / `CLAUDE.md`.\
+  \ Suggested message: `docs: update Autodocs`.\n- Push the branch and open a PR titled\
+  \ `docs: update Autodocs`. If that branch already has an open PR, update the existing\
+  \ PR instead of creating a duplicate. PR body should follow the autodocs suggested\
+  \ template: changed docs, evidence inspected, context sources used, review notes.\n\
+  - If there were no docs changes, do NOT open a PR; report that docs are current.\n\
+  \nAuthentication for git push + PR: the repo was cloned read-only, so before pushing\
+  \ re-point the origin URL at an authenticated https remote using the injected `$GITHUB_TOKEN`\
+  \ (reference it by name inside the remote URL; never echo it):\n```bash\ngit remote\
+  \ set-url origin \"https://x-access-token:${GITHUB_TOKEN}@github.com/rajshah4/openhands-multi-agent-demo.git\"\
+  \n```\nUse `gh` for the PR (it picks up `$GITHUB_TOKEN` automatically), or the GitHub\
+  \ API with `Authorization: Bearer $GITHUB_TOKEN`.\n\n## Report to #it\n\nPost a\
+  \ short plain-text summary to the #it Slack channel via the `$SLACK_IT` incoming\
+  \ webhook (reference it only as the curl URL; never echo it):\n```bash\ncurl -sS\
+  \ -m 15 -H 'Content-Type: application/json' \\\n  -d \"{\\\"text\\\": <your message\
+  \ as JSON string>}\" \"$SLACK_IT\"\n```\nThe message must contain, in plain text:\n\
+  - the date and which repo you documented,\n- whether docs were updated or already\
+  \ current,\n- if a PR was opened: the PR URL,\n- a one-line note on the main docs\
+  \ change (or \"no changes needed\"),\n- a link to the repo's `openwiki/quickstart.md`\
+  \ on the default branch.\nKeep it under ~8 lines. Do not include secrets, token\
+  \ values, or partial secret prefixes.\n\nFinish. Do not start another loop.\n\n\
+  ## Final outcome\n\nAfter the workflow and Slack report, call the finish tool with\
+  \ a structured task outcome. Set `status` to `success` when all required steps finished,\
+  \ including when the docs were already current. Use `partial_success`, `blocked`,\
+  \ or `failed` when those accurately describe an incomplete run. Include a concise\
+  \ `outcome_summary` that states whether docs changed, whether a PR was created or\
+  \ updated, and whether the Slack report was posted.\n"
+setup_script_path: setup.sh
+tarball_executables:
+- setup.sh
+tarball_source:
+  type: internal
+  url: null
+timeout: 1200
+trigger:
+  schedule: 0 9 * * 1
+  timezone: America/Chicago
+  type: cron

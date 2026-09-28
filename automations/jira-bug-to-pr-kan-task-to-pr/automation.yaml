@@ -1,0 +1,37 @@
+agent_profile_id: null
+enabled: false
+entrypoint: .venv/bin/python main.py
+keep_alive: true
+model: Bedrock-Claude-Sonnet-4-5-fast
+name: Jira Bug to PR - KAN Task to PR
+preset_metadata: null
+prompt: "# SDLC Automation Demo: Jira Request To PR\n\n## What Triggered This\n\n\
+  A new Jira request started this automation. The request may be brief and written\n\
+  entirely in business language.\n\n## What You Do\n\n1. Understand the request, its\
+  \ context, and any acceptance criteria.\n2. Follow the repository's SDLC story skill\
+  \ to turn the request into an\n   OpenSpec-style proposal, design, task list, and\
+  \ test plan.\n3. Implement the smallest safe change and create a draft pull request.\n\
+  4. Record assumptions, evidence, and validation results in the pull request.\n5.\
+  \ Hand the pull request to the automated QA workflow for independent testing.\n\n\
+  ## What You Post Back To Jira\n\n- A concise status update and link to the draft\
+  \ pull request.\n- The validation performed and any assumptions that need confirmation.\n\
+  - A clear question when a product or engineering decision requires human input.\n\
+  \n## Human Control\n\nPeople remain responsible for scope, pull-request review,\
+  \ merge, deployment, and\nany risky follow-up. Automated QA validates the change;\
+  \ it never approves or\nmerges it.\n\n## Operating Boundaries\n\nUse the configured\
+  \ Jira and GitHub integrations and follow the repository-local\nskills. Keep the\
+  \ workflow event-driven, protect credentials, and do not change\nproduction resources,\
+  \ deployment settings, or branch protection.\n"
+setup_script_path: setup.sh
+tarball_executables:
+- setup.sh
+tarball_source:
+  type: internal
+  url: null
+timeout: 900
+trigger:
+  filter: issue.fields.project.key == 'KAN' && issue.fields.issuetype.name == 'Task'
+    && !contains(issue.fields.labels, 'sidekick-v2')
+  'on': jira:issue_created
+  source: jira-direct
+  type: event

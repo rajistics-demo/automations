@@ -1,0 +1,76 @@
+agent_profile_id: null
+enabled: false
+entrypoint: .venv/bin/python main.py
+keep_alive: true
+model: Bedrock-Claude-Sonnet-4-5-fast
+name: SDLC_1 - Jira to PR
+preset_metadata:
+  preset_type: prompt
+  prompt: "# Manual readiness check\n\nIf this run was manually dispatched with no\
+    \ event payload, perform a read-only readiness check instead of the event workflow.\
+    \ Confirm the cloned repository is present, read its AGENTS.md and the skill needed\
+    \ by this work cell, and verify that the GitHub API is reachable with the configured\
+    \ GITHUB_TOKEN without printing the token. For Jira to PR, also confirm the Jira\
+    \ integration is configured without creating or changing an issue. Do not create\
+    \ branches, commits, pull requests, comments, labels, or Jira updates. Finish\
+    \ with status `success` and an outcome_summary explicitly saying \u201CManual\
+    \ readiness check passed; event workflow was not exercised\u201D only if every\
+    \ check passed. Otherwise finish with `blocked` or `failed` and identify the failed\
+    \ check.\n\n# Event workflow\n\n# Jira Request To Pull Request\n\nStart by loading\
+    \ and following the cloned repository's `sdlc-story` skill. That repository-owned\
+    \ skill, together with `AGENTS.md`, is the source of truth for how to investigate,\
+    \ implement, validate, and hand off the attached Jira request.\n\nProduce a focused,\
+    \ human-reviewable draft pull request. People remain responsible for scope, review,\
+    \ merge, deployment, and risky follow-up. Do not merge, change deployment settings\
+    \ or branch protection, or expose credentials.\n\nInclude the concrete OpenHands\
+    \ conversation link from `$AUTOMATION_SESSION_URL` in the pull-request description\
+    \ when it is available. Every Jira comment and pull-request description posted\
+    \ by this run must end with: `Created by an AI agent (OpenHands) on behalf of\
+    \ Rajiv Shah.`\n\n# Final task outcome\n\nAfter an event-triggered workflow, call\
+    \ the finish tool with structured `status` and `outcome_summary` fields. Use `success`\
+    \ only when the required work and provider handoff completed; use `partial_success`,\
+    \ `blocked`, or `failed` for an incomplete run. Summarize the concrete PR, review,\
+    \ or QA result and handoff in `outcome_summary`.\n"
+  repos:
+  - ref: main
+    url: https://github.com/rajshah4/sdlc-automation-github-demo
+prompt: "# Manual readiness check\n\nIf this run was manually dispatched with no event\
+  \ payload, perform a read-only readiness check instead of the event workflow. Confirm\
+  \ the cloned repository is present, read its AGENTS.md and the skill needed by this\
+  \ work cell, and verify that the GitHub API is reachable with the configured GITHUB_TOKEN\
+  \ without printing the token. For Jira to PR, also confirm the Jira integration\
+  \ is configured without creating or changing an issue. Do not create branches, commits,\
+  \ pull requests, comments, labels, or Jira updates. Finish with status `success`\
+  \ and an outcome_summary explicitly saying \u201CManual readiness check passed;\
+  \ event workflow was not exercised\u201D only if every check passed. Otherwise finish\
+  \ with `blocked` or `failed` and identify the failed check.\n\n# Event workflow\n\
+  \n# Jira Request To Pull Request\n\nStart by loading and following the cloned repository's\
+  \ `sdlc-story` skill. That repository-owned skill, together with `AGENTS.md`, is\
+  \ the source of truth for how to investigate, implement, validate, and hand off\
+  \ the attached Jira request.\n\nProduce a focused, human-reviewable draft pull request.\
+  \ People remain responsible for scope, review, merge, deployment, and risky follow-up.\
+  \ Do not merge, change deployment settings or branch protection, or expose credentials.\n\
+  \nInclude the concrete OpenHands conversation link from `$AUTOMATION_SESSION_URL`\
+  \ in the pull-request description when it is available. Every Jira comment and pull-request\
+  \ description posted by this run must end with: `Created by an AI agent (OpenHands)\
+  \ on behalf of Rajiv Shah.`\n\n# Final task outcome\n\nAfter an event-triggered\
+  \ workflow, call the finish tool with structured `status` and `outcome_summary`\
+  \ fields. Use `success` only when the required work and provider handoff completed;\
+  \ use `partial_success`, `blocked`, or `failed` for an incomplete run. Summarize\
+  \ the concrete PR, review, or QA result and handoff in `outcome_summary`.\n"
+setup_script_path: setup.sh
+tarball_executables:
+- setup.sh
+tarball_source:
+  type: internal
+  url: null
+timeout: 1800
+trigger:
+  destination: dispatch_run
+  filter: null
+  'on': jira:issue_created
+  source: jira-direct
+  subject_key_expr: null
+  turn_text_expr: null
+  type: event
+  wake_agent: true

@@ -1,0 +1,74 @@
+agent_profile_id: null
+enabled: true
+entrypoint: .venv/bin/python main.py
+keep_alive: true
+model: Bedrock-Claude-Haiku-4-5
+name: SDLC_2 - Code Review
+preset_metadata:
+  preset_type: prompt
+  prompt: "# Review a pull request\n\n**Manual test with no event:** Check only the\
+    \ repository, instructions, and GitHub access, then stop. Do not search for or\
+    \ select a pull request, even if one has `openhands-review`. Do not post comments\
+    \ or change labels. Mark the readiness check successful when those checks pass,\
+    \ and say that the event workflow was not exercised.\n\nWhen a pull request receives\
+    \ `openhands-review`, follow the cloned repository\u2019s `AGENTS.md`, `sdlc-context-reuse`\
+    \ skill, and `sdlc-code-review` skill. Read the pull request and linked request,\
+    \ check the changed behavior and tests, and report concrete findings with evidence\
+    \ and remaining risk. For documentation, check deployment-specific claims against\
+    \ current settings and general rules against provider documentation; formatting\
+    \ checks alone do not establish accuracy. Do not claim a test passed unless you\
+    \ ran it or can cite its result.\n\nBefore posting the final review comment, remove\
+    \ `openhands-review` and add `openhands-qa` so QA can start. Check that the review\
+    \ label is gone. If QA already advanced the pull request to `openhands:done`,\
+    \ do not re-add `openhands-qa`. Do not add `openhands:done` yourself; QA owns\
+    \ the final status. Post exactly one GitHub result, then verify it exists before\
+    \ retrying. Distinguish findings from recommendations. In a PR comment, use \u201C\
+    no blocking findings\u201D when appropriate; never call the comment \u201Capproved\u201D\
+    \ or imply formal GitHub approval. People decide whether to approve, change, or\
+    \ merge the pull request.\n\nUse a conversation link only when it identifies this\
+    \ run. Never guess one. Finish with a structured status and a short outcome summary;\
+    \ for event runs, mark success only after the GitHub handoff and review are complete."
+  repos:
+  - ref: main
+    url: https://github.com/rajistics-demo/sdlc-automation-github-demo
+prompt: "# Review a pull request\n\n**Manual test with no event:** Check only the\
+  \ repository, instructions, and GitHub access, then stop. Do not search for or select\
+  \ a pull request, even if one has `openhands-review`. Do not post comments or change\
+  \ labels. Mark the readiness check successful when those checks pass, and say that\
+  \ the event workflow was not exercised.\n\nWhen a pull request receives `openhands-review`,\
+  \ follow the cloned repository\u2019s `AGENTS.md`, `sdlc-context-reuse` skill, and\
+  \ `sdlc-code-review` skill. Read the pull request and linked request, check the\
+  \ changed behavior and tests, and report concrete findings with evidence and remaining\
+  \ risk. For documentation, check deployment-specific claims against current settings\
+  \ and general rules against provider documentation; formatting checks alone do not\
+  \ establish accuracy. Do not claim a test passed unless you ran it or can cite its\
+  \ result.\n\nBefore posting the final review comment, remove `openhands-review`\
+  \ and add `openhands-qa` so QA can start. Check that the review label is gone. If\
+  \ QA already advanced the pull request to `openhands:done`, do not re-add `openhands-qa`.\
+  \ Do not add `openhands:done` yourself; QA owns the final status. Post exactly one\
+  \ GitHub result, then verify it exists before retrying. Distinguish findings from\
+  \ recommendations. In a PR comment, use \u201Cno blocking findings\u201D when appropriate;\
+  \ never call the comment \u201Capproved\u201D or imply formal GitHub approval. People\
+  \ decide whether to approve, change, or merge the pull request.\n\nUse a conversation\
+  \ link only when it identifies this run. Never guess one. Finish with a structured\
+  \ status and a short outcome summary; for event runs, mark success only after the\
+  \ GitHub handoff and review are complete."
+setup_script_path: setup.sh
+tarball_executables:
+- setup.sh
+tarball_source:
+  type: internal
+  url: null
+timeout: 600
+trigger:
+  destination: dispatch_run
+  filter: repository.full_name == 'rajistics-demo/sdlc-automation-github-demo' &&
+    pull_request != null && label.name == 'openhands-review' && !contains(pull_request.labels[].name,
+    'openhands:done')
+  'on':
+  - pull_request.labeled
+  source: github
+  subject_key_expr: null
+  turn_text_expr: null
+  type: event
+  wake_agent: true

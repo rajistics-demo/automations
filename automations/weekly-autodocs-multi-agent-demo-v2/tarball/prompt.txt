@@ -1,0 +1,43 @@
+Run the autodocs update workflow for the cloned repository rajshah4/openhands-multi-agent-demo (it was cloned into the workspace on its default branch).
+
+Use the autodocs plugin. Invoke the update command: `/autodocs:update`.
+
+The repository already has `openwiki/` documentation and a top-level `AGENTS.md`, so this is an UPDATE run, not an init. Follow the autodocs update-mode rules strictly:
+- Read existing `openwiki/` docs and `openwiki/.last-update.json` first.
+- Inspect git history since the last docs update to find what changed.
+- Edit ONLY documentation pages that are stale, incomplete, or misleading because of recent source changes. Prefer replacing one stale sentence over rewriting an accurate page. Do not make formatting-only edits. If the docs are already current, change nothing and say so.
+- Keep all generated docs under `openwiki/`. The only allowed edits outside `openwiki/` are the top-level `AGENTS.md` / `CLAUDE.md` Autodocs reference section.
+- Update `openwiki/.last-update.json` metadata only if docs content changed.
+
+When the docs edits are done, commit and open a pull request:
+- Create a branch named `autodocs/update`.
+- Commit ONLY `openwiki/**` and top-level `AGENTS.md` / `CLAUDE.md`. Suggested message: `docs: update Autodocs`.
+- Push the branch and open a PR titled `docs: update Autodocs`. If that branch already has an open PR, update the existing PR instead of creating a duplicate. PR body should follow the autodocs suggested template: changed docs, evidence inspected, context sources used, review notes.
+- If there were no docs changes, do NOT open a PR; report that docs are current.
+
+Authentication for git push + PR: the repo was cloned read-only, so before pushing re-point the origin URL at an authenticated https remote using the injected `$GITHUB_TOKEN` (reference it by name inside the remote URL; never echo it):
+```bash
+git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/rajshah4/openhands-multi-agent-demo.git"
+```
+Use `gh` for the PR (it picks up `$GITHUB_TOKEN` automatically), or the GitHub API with `Authorization: Bearer $GITHUB_TOKEN`.
+
+## Report to #it
+
+Post a short plain-text summary to the #it Slack channel via the `$SLACK_IT` incoming webhook (reference it only as the curl URL; never echo it):
+```bash
+curl -sS -m 15 -H 'Content-Type: application/json' \
+  -d "{\"text\": <your message as JSON string>}" "$SLACK_IT"
+```
+The message must contain, in plain text:
+- the date and which repo you documented,
+- whether docs were updated or already current,
+- if a PR was opened: the PR URL,
+- a one-line note on the main docs change (or "no changes needed"),
+- a link to the repo's `openwiki/quickstart.md` on the default branch.
+Keep it under ~8 lines. Do not include secrets, token values, or partial secret prefixes.
+
+Finish. Do not start another loop.
+
+## Final outcome
+
+After the workflow and Slack report, call the finish tool with a structured task outcome. Set `status` to `success` when all required steps finished, including when the docs were already current. Use `partial_success`, `blocked`, or `failed` when those accurately describe an incomplete run. Include a concise `outcome_summary` that states whether docs changed, whether a PR was created or updated, and whether the Slack report was posted.

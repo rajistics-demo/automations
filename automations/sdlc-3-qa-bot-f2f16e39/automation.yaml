@@ -1,0 +1,87 @@
+agent_profile_id: null
+enabled: true
+entrypoint: .venv/bin/python main.py
+keep_alive: true
+model: Bedrock-Claude-Haiku-4-5
+name: SDLC_3 - QA Bot
+preset_metadata:
+  preset_type: prompt
+  prompt: "# QA a pull request\n\n**First identify the run type.** A webhook JSON\
+    \ payload attached to this task with `pull_request.number` is a PR event. An `issues.labeled`\
+    \ payload with `issue.pull_request` is also a PR event; resolve its PR number.\
+    \ The payload need not be saved as `event.json`. Process that PR. **Only when\
+    \ there is no webhook payload at all**, perform a manual readiness check: verify\
+    \ the repository, instructions, and GitHub access, then stop. Do not select a\
+    \ labeled PR, post comments, or change labels in manual mode. Report that the\
+    \ event workflow was not exercised.\n\nWhen a pull request receives `openhands-qa`,\
+    \ follow the cloned repository\u2019s `AGENTS.md`, `sdlc-context-reuse` skill,\
+    \ and `sdlc-qa` skill. Read the diff and acceptance criteria, run focused tests\
+    \ for the changed behavior, then broaden checks when useful. For documentation,\
+    \ check deployment-specific claims against current settings and general rules\
+    \ against provider documentation; a Markdown or keyword check alone is insufficient.\
+    \ In the report, name evidence actually inspected and mark unverified claims.\
+    \ Do not attribute account identities or permissions to `AGENTS.md` unless it\
+    \ states them. The automation ends at QA; humans decide merge. Measure file and\
+    \ test counts from the current diff or command output rather than estimating.\
+    \ For visible UI changes, gather browser evidence if the available tools permit\
+    \ it; clearly identify any fallback checks. Do not claim a test or UI check passed\
+    \ without evidence.\n\nPost exactly one pull request report with the commands,\
+    \ results, artifacts, and remaining risk. Before retrying a post, check whether\
+    \ the report already exists. Once it is posted, remove `openhands-qa` and stale\
+    \ `openhands:in-progress`, then add `openhands:done` only when QA succeeded; otherwise\
+    \ add `openhands:needs-human`. Verify the final labels. People decide whether\
+    \ the evidence is sufficient and whether to merge or deploy.\n\nUse a conversation\
+    \ link only when it identifies this run. Never guess one. Finish with a structured\
+    \ status and a short outcome summary that matches the checks and GitHub handoff\
+    \ actually completed."
+  repos:
+  - ref: main
+    url: https://github.com/rajistics-demo/sdlc-automation-github-demo
+prompt: "# QA a pull request\n\n**First identify the run type.** A webhook JSON payload\
+  \ attached to this task with `pull_request.number` is a PR event. An `issues.labeled`\
+  \ payload with `issue.pull_request` is also a PR event; resolve its PR number. The\
+  \ payload need not be saved as `event.json`. Process that PR. **Only when there\
+  \ is no webhook payload at all**, perform a manual readiness check: verify the repository,\
+  \ instructions, and GitHub access, then stop. Do not select a labeled PR, post comments,\
+  \ or change labels in manual mode. Report that the event workflow was not exercised.\n\
+  \nWhen a pull request receives `openhands-qa`, follow the cloned repository\u2019\
+  s `AGENTS.md`, `sdlc-context-reuse` skill, and `sdlc-qa` skill. Read the diff and\
+  \ acceptance criteria, run focused tests for the changed behavior, then broaden\
+  \ checks when useful. For documentation, check deployment-specific claims against\
+  \ current settings and general rules against provider documentation; a Markdown\
+  \ or keyword check alone is insufficient. In the report, name evidence actually\
+  \ inspected and mark unverified claims. Do not attribute account identities or permissions\
+  \ to `AGENTS.md` unless it states them. The automation ends at QA; humans decide\
+  \ merge. Measure file and test counts from the current diff or command output rather\
+  \ than estimating. For visible UI changes, gather browser evidence if the available\
+  \ tools permit it; clearly identify any fallback checks. Do not claim a test or\
+  \ UI check passed without evidence.\n\nPost exactly one pull request report with\
+  \ the commands, results, artifacts, and remaining risk. Before retrying a post,\
+  \ check whether the report already exists. Once it is posted, remove `openhands-qa`\
+  \ and stale `openhands:in-progress`, then add `openhands:done` only when QA succeeded;\
+  \ otherwise add `openhands:needs-human`. Verify the final labels. People decide\
+  \ whether the evidence is sufficient and whether to merge or deploy.\n\nUse a conversation\
+  \ link only when it identifies this run. Never guess one. Finish with a structured\
+  \ status and a short outcome summary that matches the checks and GitHub handoff\
+  \ actually completed."
+setup_script_path: setup.sh
+tarball_executables:
+- setup.sh
+tarball_source:
+  type: internal
+  url: null
+timeout: 600
+trigger:
+  destination: dispatch_run
+  filter: repository.full_name == 'rajistics-demo/sdlc-automation-github-demo' &&
+    label.name == 'openhands-qa' && ((pull_request != null && !contains(pull_request.labels[].name,
+    'openhands:done')) || (issue.pull_request != null && !contains(issue.labels[].name,
+    'openhands:done')))
+  'on':
+  - pull_request.labeled
+  - issues.labeled
+  source: github
+  subject_key_expr: null
+  turn_text_expr: null
+  type: event
+  wake_agent: true

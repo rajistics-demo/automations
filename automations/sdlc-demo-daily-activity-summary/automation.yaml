@@ -1,0 +1,57 @@
+agent_profile_id: null
+enabled: false
+entrypoint: .venv/bin/python main.py
+keep_alive: null
+model: Bedrock-Claude-Haiku-4-5
+name: "SDLC Demo \u2014 Daily Activity Summary"
+preset_metadata:
+  preset_type: prompt
+  prompt: "Write a Python script to /tmp/summary.py that fetches the last 24 hours\
+    \ of GitHub activity on rajistics-demo/sdlc-automation-github-demo, then run it\
+    \ with a single terminal command.\n\nThe script must:\n1. Retrieve the GITHUB_TOKEN\
+    \ secret using: import subprocess; token = subprocess.run(['bash','-c','echo $GITHUB_TOKEN'],\
+    \ capture_output=True, text=True).stdout.strip()\n2. Call these GitHub API endpoints\
+    \ with urllib.request:\n   - /repos/rajistics-demo/sdlc-automation-github-demo/commits?since=<ISO8601\
+    \ 24h ago>&per_page=50\n   - /repos/rajistics-demo/sdlc-automation-github-demo/pulls?state=all&sort=updated&direction=desc&per_page=50\
+    \ (filter updated_at >= since)\n   - /repos/rajistics-demo/sdlc-automation-github-demo/issues?state=all&sort=updated&direction=desc&per_page=50\
+    \ (filter updated_at >= since, skip items that have a pull_request key)\n   -\
+    \ /repos/rajistics-demo/sdlc-automation-github-demo/releases?per_page=5 (filter\
+    \ created_at >= since)\n3. Print the summary to stdout in this format:\n\n   \U0001F4C5\
+    \ Daily Activity \u2014 rajistics-demo/sdlc-automation-github-demo\n   2026-09-03\n\
+    \n   \U0001F500 Commits (N)\n     - <message> by <author> (<sha7>)\n\n   \U0001F501\
+    \ Pull Requests (N)\n     - #<num> \"<title>\" \u2014 <state> by <user>\n\n  \
+    \ \U0001F41B Issues (N)\n     - #<num> \"<title>\" \u2014 <state>\n\n   \U0001F680\
+    \ Releases (N)\n     - <tag> \u2014 <name>\n\n   Omit any section with zero items.\
+    \ If nothing at all, print: No activity in the last 24 hours.\n\nAfter writing\
+    \ the script, run it immediately with: python3 /tmp/summary.py"
+  repos:
+  - ref: main
+    url: https://github.com/rajshah4/sdlc-automation-github-demo
+prompt: "Write a Python script to /tmp/summary.py that fetches the last 24 hours of\
+  \ GitHub activity on rajistics-demo/sdlc-automation-github-demo, then run it with\
+  \ a single terminal command.\n\nThe script must:\n1. Retrieve the GITHUB_TOKEN secret\
+  \ using: import subprocess; token = subprocess.run(['bash','-c','echo $GITHUB_TOKEN'],\
+  \ capture_output=True, text=True).stdout.strip()\n2. Call these GitHub API endpoints\
+  \ with urllib.request:\n   - /repos/rajistics-demo/sdlc-automation-github-demo/commits?since=<ISO8601\
+  \ 24h ago>&per_page=50\n   - /repos/rajistics-demo/sdlc-automation-github-demo/pulls?state=all&sort=updated&direction=desc&per_page=50\
+  \ (filter updated_at >= since)\n   - /repos/rajistics-demo/sdlc-automation-github-demo/issues?state=all&sort=updated&direction=desc&per_page=50\
+  \ (filter updated_at >= since, skip items that have a pull_request key)\n   - /repos/rajistics-demo/sdlc-automation-github-demo/releases?per_page=5\
+  \ (filter created_at >= since)\n3. Print the summary to stdout in this format:\n\
+  \n   \U0001F4C5 Daily Activity \u2014 rajistics-demo/sdlc-automation-github-demo\n\
+  \   2026-09-03\n\n   \U0001F500 Commits (N)\n     - <message> by <author> (<sha7>)\n\
+  \n   \U0001F501 Pull Requests (N)\n     - #<num> \"<title>\" \u2014 <state> by <user>\n\
+  \n   \U0001F41B Issues (N)\n     - #<num> \"<title>\" \u2014 <state>\n\n   \U0001F680\
+  \ Releases (N)\n     - <tag> \u2014 <name>\n\n   Omit any section with zero items.\
+  \ If nothing at all, print: No activity in the last 24 hours.\n\nAfter writing the\
+  \ script, run it immediately with: python3 /tmp/summary.py"
+setup_script_path: setup.sh
+tarball_executables:
+- setup.sh
+tarball_source:
+  type: internal
+  url: null
+timeout: 600
+trigger:
+  schedule: 0 9 * * *
+  timezone: UTC
+  type: cron

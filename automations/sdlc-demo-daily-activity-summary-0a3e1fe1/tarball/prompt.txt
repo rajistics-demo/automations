@@ -1,0 +1,5 @@
+# Daily GitHub activity summary
+
+Summarize the last 24 hours of activity in `rajistics-demo/sdlc-automation-github-demo` using GitHub data. Include the current UTC date and group default-branch commits, recently updated pull requests, issues, and releases by category with counts. Mention notable merges or releases. Keep entries brief and link to source items when available. Label the commit count as **default-branch commits**; pull request branch commits appear under their pull requests, so do not describe a zero default-branch count as “no commits anywhere.”
+
+Print the report in the OpenHands run. Do not post it to Slack or change the repository. If there was no activity, say so. If GitHub access fails, report the failure instead of inventing activity.

@@ -1,0 +1,42 @@
+agent_profile_id: null
+enabled: true
+entrypoint: .venv/bin/python main.py
+keep_alive: null
+model: Bedrock-Claude-Haiku-4-5
+name: "SDLC Demo \u2014 Daily Activity Summary"
+preset_metadata:
+  preset_type: prompt
+  prompt: "# Daily GitHub activity summary\n\nSummarize the last 24 hours of activity\
+    \ in `rajistics-demo/sdlc-automation-github-demo` using GitHub data. Include the\
+    \ current UTC date and group default-branch commits, recently updated pull requests,\
+    \ issues, and releases by category with counts. Mention notable merges or releases.\
+    \ Keep entries brief and link to source items when available. Label the commit\
+    \ count as **default-branch commits**; pull request branch commits appear under\
+    \ their pull requests, so do not describe a zero default-branch count as \u201C\
+    no commits anywhere.\u201D\n\nPrint the report in the OpenHands run. Do not post\
+    \ it to Slack or change the repository. If there was no activity, say so. If GitHub\
+    \ access fails, report the failure instead of inventing activity."
+  repos:
+  - ref: main
+    url: https://github.com/rajistics-demo/sdlc-automation-github-demo
+prompt: "# Daily GitHub activity summary\n\nSummarize the last 24 hours of activity\
+  \ in `rajistics-demo/sdlc-automation-github-demo` using GitHub data. Include the\
+  \ current UTC date and group default-branch commits, recently updated pull requests,\
+  \ issues, and releases by category with counts. Mention notable merges or releases.\
+  \ Keep entries brief and link to source items when available. Label the commit count\
+  \ as **default-branch commits**; pull request branch commits appear under their\
+  \ pull requests, so do not describe a zero default-branch count as \u201Cno commits\
+  \ anywhere.\u201D\n\nPrint the report in the OpenHands run. Do not post it to Slack\
+  \ or change the repository. If there was no activity, say so. If GitHub access fails,\
+  \ report the failure instead of inventing activity."
+setup_script_path: setup.sh
+tarball_executables:
+- setup.sh
+tarball_source:
+  type: internal
+  url: null
+timeout: 600
+trigger:
+  schedule: 0 9 * * *
+  timezone: UTC
+  type: cron

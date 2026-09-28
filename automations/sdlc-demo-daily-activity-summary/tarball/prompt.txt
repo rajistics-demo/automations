@@ -1,0 +1,29 @@
+Write a Python script to /tmp/summary.py that fetches the last 24 hours of GitHub activity on rajistics-demo/sdlc-automation-github-demo, then run it with a single terminal command.
+
+The script must:
+1. Retrieve the GITHUB_TOKEN secret using: import subprocess; token = subprocess.run(['bash','-c','echo $GITHUB_TOKEN'], capture_output=True, text=True).stdout.strip()
+2. Call these GitHub API endpoints with urllib.request:
+   - /repos/rajistics-demo/sdlc-automation-github-demo/commits?since=<ISO8601 24h ago>&per_page=50
+   - /repos/rajistics-demo/sdlc-automation-github-demo/pulls?state=all&sort=updated&direction=desc&per_page=50 (filter updated_at >= since)
+   - /repos/rajistics-demo/sdlc-automation-github-demo/issues?state=all&sort=updated&direction=desc&per_page=50 (filter updated_at >= since, skip items that have a pull_request key)
+   - /repos/rajistics-demo/sdlc-automation-github-demo/releases?per_page=5 (filter created_at >= since)
+3. Print the summary to stdout in this format:
+
+   📅 Daily Activity — rajistics-demo/sdlc-automation-github-demo
+   2026-09-03
+
+   🔀 Commits (N)
+     - <message> by <author> (<sha7>)
+
+   🔁 Pull Requests (N)
+     - #<num> "<title>" — <state> by <user>
+
+   🐛 Issues (N)
+     - #<num> "<title>" — <state>
+
+   🚀 Releases (N)
+     - <tag> — <name>
+
+   Omit any section with zero items. If nothing at all, print: No activity in the last 24 hours.
+
+After writing the script, run it immediately with: python3 /tmp/summary.py

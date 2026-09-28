@@ -1,0 +1,8 @@
+Use the GITHUB_TOKEN secret and the GitHub REST API to fetch all activity from the last 24 hours on the repository rajistics-demo/sdlc-automation-github-demo. Gather:
+1. Commits pushed (author, message, branch)
+2. Pull requests opened, merged, or closed
+3. Issues opened, closed, or commented on
+4. Pull request reviews submitted
+5. Any new releases or tags
+
+Compile a concise, clearly formatted Markdown summary report. Group items by category, include counts, and highlight any notable changes (e.g. merges to main, new releases). Then post the full summary to the Slack channel using the SLACK_IT secret as the webhook URL. If there is no activity in the last 24 hours, post a brief "No activity in the last 24 hours" message to Slack instead.
